@@ -3,7 +3,7 @@ prhunguy
 
 List.h
 
-This is the header file for List.c
+This is the header file for List.c.
 
 List.c
 
@@ -27,4 +27,4 @@ This is the table to contents for this programming assignment.
 
 Additional Notes:
 
-Segments of code taken from queue.c and fileIO.c, they are modified to fit the purposes of this assignment. Help recieved from TA by drawing and breaking down problem, no code was copied.
+Segments of code taken from queue.c and fileIO.c, they are modified to fit the purposes of this assignment. 
