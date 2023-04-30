@@ -35,4 +35,4 @@ That is this file. It is meant to act as a table of contents for the files in th
 
 Additional Notes:
 
-Help recieved from TA psuedocode (Mahyar Vahabi), and help with getting duplicate from Brian Nguyen. Several functions taken from pa2.
+Help recieved from TA psuedocode (Mahyar Vahabi), and help with getting duplicate from Brian Nguyen (another TA for the class). Several functions taken from pa2.
