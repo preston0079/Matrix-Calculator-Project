@@ -169,9 +169,13 @@ int equals(Matrix A, Matrix B){
         moveFront(c);
         moveFront(d);
 
-        if(length(A->row[i]) == length(B->row[i])){
-            continue;
-        }else{
+        // if(length(A->row[i]) == length(B->row[i])){as---------------------------------------TEST 6 NO LONGER ISSUE
+        //     continue;
+        // }else{
+        //     return 0;
+        // }
+
+        if(length(A->row[i]) != length(B->row[i])){
             return 0;
         }
 
