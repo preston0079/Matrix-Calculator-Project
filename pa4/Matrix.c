@@ -350,7 +350,6 @@ Matrix scalarMult(double x, Matrix A){
     int i, col;
     double val;
 
-    // if x is 0 or A's nnz is 0 just return M
     if(x == 0 || A->NNZ == 0){
         return M;
     }
@@ -586,10 +585,6 @@ Matrix product(Matrix A, Matrix B){
     }
 
     Matrix M = newMatrix(size(A));
-
-    // for (int i = 1; i <= size(M); i++) {
-    //     M->row[i] = newList();
-    // }
 
     Matrix T = transpose(B);
 
