@@ -39,4 +39,4 @@ That is this file. It is meant to act as a table of contents for the files in th
 
 Additional Notes:
 
-Help recieved from TA psuedocode (Mahyar Vahabi). Several functions taken from pa2, List.c is modified from pa1.
+Help recieved from TA psuedocode (Mahyar Vahabi). List.c is modified from pa1.
