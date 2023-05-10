@@ -215,7 +215,7 @@ void changeEntry(Matrix M, int i, int j, double x){
     List L = M->row[i];
     Entry E = NULL;
 
-    if((length(L) == 0) && x != 0){
+    if((length(L) == 0)){
         if(x != 0){
             E = newEntry(j, x);
             append(L, E);
@@ -223,7 +223,9 @@ void changeEntry(Matrix M, int i, int j, double x){
         }        
     }
         
-    for(moveFront(L); index(L) >= 0; moveNext(L)){
+    moveFront(L);
+
+    while(index(L) >= 0){
         
         E = (Entry)get(L);
 
@@ -240,7 +242,6 @@ void changeEntry(Matrix M, int i, int j, double x){
             }
             break;
 
-        
         }else if(E->col > j){
             if(x != 0){
                 E = newEntry(j, x);
@@ -249,6 +250,9 @@ void changeEntry(Matrix M, int i, int j, double x){
             }
             break;
         }
+
+
+        moveNext(L);
     }
 
 
