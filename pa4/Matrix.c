@@ -83,7 +83,7 @@ void freeMatrix(Matrix* pM){
 
         makeZero(*pM);
 
-        for (int i = 1; i <= (*pM)->size; i++){
+        for (int i = 1; i <= size((*pM)); i++){
             freeList(&((*pM)->row[i]));
             (*pM)->row[i] = NULL;
         }
@@ -136,12 +136,12 @@ int equals(Matrix A, Matrix B){
     Entry x, y;
     List c, d;
 
-    if(A->size != B->size){
+    if(size(A) != size(B)){
         return 0;
     }
 
     
-    for(int i = 1; i <= A->size; i++){
+    for(int i = 1; i <= size(A); i++){
 
         c = A->row[i];
         d = B->row[i];
@@ -158,7 +158,7 @@ int equals(Matrix A, Matrix B){
             return 0;
         }
 
-        while( (index(c) >= 0 && index(d) >= 0) && (A->size == B->size)){
+        while( (index(c) >= 0 && index(d) >= 0) && (size(A) == size(B))){
             x = (Entry)get(A->row[i]);
             y = (Entry)get(B->row[i]);
 
@@ -187,7 +187,7 @@ void makeZero(Matrix M){
 
     M->NNZ = 0;
 
-    for(int i = 1; i <= M->size; i++){
+    for(int i = 1; i <= size(M); i++){
         for(moveFront(M->row[i]); index(M->row[i]) >= 0; moveNext(M->row[i])){
             Entry E = (Entry)get(M->row[i]);
             deleteEntry(&E);
@@ -281,7 +281,7 @@ Matrix copy(Matrix A){
     int i, col;
     double val;
 
-    for(i = 1; i <= A->size; i++){
+    for(i = 1; i <= size(A); i++){
         moveFront(A->row[i]);
         while(index(A->row[i]) >= 0){
             E = get(A->row[i]);
@@ -317,7 +317,7 @@ Matrix transpose(Matrix A){
     double val;
 
     T->NNZ = A->NNZ;
-    for(i = 1; i <= A->size; i++){
+    for(i = 1; i <= size(A); i++){
         moveFront(A->row[i]);
         while(index(A->row[i]) >= 0){
             E = get(A->row[i]);
@@ -357,7 +357,7 @@ Matrix scalarMult(double x, Matrix A){
 
     M->NNZ = A->NNZ;
 
-    for(i = 1; i <= A->size; i++){
+    for(i = 1; i <= size(A); i++){
         moveFront(A->row[i]);
         while(index(A->row[i]) >= 0){
             E = get(A->row[i]);
@@ -463,13 +463,13 @@ Matrix sum(Matrix A, Matrix B){
         printf("Error: calling sum() Pre failure\n");
         exit(EXIT_FAILURE);
     }
-
-    Matrix Add = newMatrix(size(A));
+    Matrix Add;
 
     if(equals(A, B)){
         return scalarMult(2, A);
     }else{
-        for(int i = 1; i <= Add->size; i++){
+        Add = newMatrix(size(A));
+        for(int i = 1; i <= size(Add); i++){
             vecSum(A->row[i], B->row[i], Add->row[i], 1, Add);
         }
     }
@@ -504,7 +504,8 @@ Matrix diff(Matrix A, Matrix B){
         makeZero(Diff);
         return Diff;
     }else{
-        for(int i = 1; i <= Diff->size; i++){
+        
+        for(int i = 1; i <= size(Diff); i++){
             vecSum(A->row[i], B->row[i], Diff->row[i], (-1), Diff);
         }
     }
@@ -595,8 +596,8 @@ Matrix product(Matrix A, Matrix B){
     int i, j;
     double x;
 
-    for(i = 1; i <= A->size; i++){
-        for(j = 1; j <= A->size; j++){
+    for(i = 1; i <= size(A); i++){
+        for(j = 1; j <= size(A); j++){
             
             if(length(A->row[i]) == 0){
                 break;
