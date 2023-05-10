@@ -13,7 +13,7 @@
 #include "List.h"
 
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
 
     FILE *input_file;
     FILE *output_file;

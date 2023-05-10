@@ -61,9 +61,6 @@ int main(int argc, char *argv[]){
 
     List pathfindings = newList();
 
-    // makeNull(G);
-    // G->sizeedges = 0;
-
     while(1){
         fscanf(input_file, " %d", &u);
         fscanf(input_file, " %d", &v);
