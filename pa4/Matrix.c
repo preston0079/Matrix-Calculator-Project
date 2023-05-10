@@ -82,6 +82,13 @@ void freeMatrix(Matrix* pM){
     if (pM != NULL && *pM != NULL){
 
         makeZero(*pM);
+
+        for (int i = 1; i <= (*pM)->size; i++){
+            freeList(&((*pM)->row[i]));
+            (*pM)->row[i] = NULL;
+        }
+
+        free((*pM)->row);
         free(*pM);
         *pM = NULL;
     }
@@ -133,34 +140,6 @@ int equals(Matrix A, Matrix B){
         return 0;
     }
 
-
-    // for(int i = 1; i <= A->size; i++){
-
-    //     c = A->row[i];
-    //     d = B->row[i];
-    //     moveFront(c);
-    //     moveFront(d);
-
-    //     if(length(A->row[i]) == length(B->row[i])){
-    //         // while the indexes of the lists[i] are GTE 0 && their sizes are equal:
-    //         while( (index(c) >= 0 && index(d) >= 0) && (A->size == B->size) ){
-    //             x = (Entry)get(A->row[i]);
-    //             y = (Entry)get(B->row[i]);
-
-    //             if(x->val != y->val){
-    //                 return 0;
-    //             }
-    //             if(x->col != y->col){
-    //                 return 0;
-    //             }
-    //             moveNext(A->row[i]);
-    //             moveNext(B->row[i]);
-    //         }
-    //     }else{
-    //         return 0;
-    //     }
-    // }
-    // return 1;
     
     for(int i = 1; i <= A->size; i++){
 
@@ -194,23 +173,6 @@ int equals(Matrix A, Matrix B){
         }
     }
     return 1;
-
-
-    // similar to List implementation of equals
-    // check if lengths of the metrics are equal and exit if they are not
-    // Entry x, y;
-    // List c, d;
-    // int i;
-    
-    // from "i" = 1 to size of "A":
-    //      set "c" and "d" to the rows of "A" and "B"
-    //      move to the front of both lists
-    //      while the indexes of the lists[i] are GTE 0 && their sizes are equal:
-                // x = (Entry)get(A->row[i]);
-                // y = (Entry)get(B->row[i]);
-    //          if their values are not equal return false
-    //          else move next on "c" and "d"
-    // return 1;
 }
 
 
@@ -232,12 +194,6 @@ void makeZero(Matrix M){
         }
         clear(M->row[i]);
     }
-
-    // set NNZ to 0
-    // iterate through the matrix:
-    //      for each row in the matrix:
-    //          free the entries and move next on the rows
-    //      clear each row
 }
 
 
@@ -259,79 +215,50 @@ void changeEntry(Matrix M, int i, int j, double x){
     List L = M->row[i];
     Entry E = NULL;
 
-    // for(moveFront(L); get(L) == j; moveNext(L)){
-    //     break;
-    // }
-
-    // if(L == NULL || index(L) == -1){
-    //     if(x != 0){
-    //         E = newEntry(j, x);
-    //         append(L, E);
-    //     }
-    //     M->NNZ++;
-    // }else if(M->row[i] > j){
-    //     if(x != 0){
-    //         E = newEntry(j, x);
-    //         insertBefore(L, E);
-    //     }
-    //     M->NNZ++;
-    // }else{
-    //     if(x != 0){
-    //         E->val = x;
-    //     }else{
-    //         freeList(&L);
-    //         M->NNZ--;
-    //     }
-    // }
-
     if((length(L) == 0) && x != 0){
-        E = newEntry(j, x);
-        append(L, E);
-        M->NNZ++;
-    }else{
-        for(moveFront(L); index(L) >= 0; moveNext(L)){
-            E = (Entry)get(L);
-            if(E->col == j){
-                if(x != 0){
-                    E = (Entry)get(L);
-                    E->val = x;
-                }else{
-                    E = (Entry)get(L);
-                    deleteEntry(&E);
-                    delete(L);
-                    M->NNZ--;
-                }
-                break;
-            }else if(E->col > j){
-                if(x != 0){
-                    E = newEntry(j, x);
-                    insertBefore(L, E);
-                    M->NNZ++;
-                }
-                break;
+        if(x != 0){
+            E = newEntry(j, x);
+            append(L, E);
+            M->NNZ++;
+        }        
+    }
+        
+    for(moveFront(L); index(L) >= 0; moveNext(L)){
+        
+        E = (Entry)get(L);
+
+
+        if(E->col == j){
+
+
+            if(x != 0){
+                E->val = x;
+            }else{
+                deleteEntry(&E);
+                delete(L);
+                M->NNZ--;
             }
-        }
-        if(index(L) == -1){
+            break;
+
+        
+        }else if(E->col > j){
             if(x != 0){
                 E = newEntry(j, x);
-                append(L, E);
+                insertBefore(L, E);
                 M->NNZ++;
-            }   
+            }
+            break;
         }
     }
 
 
-    // Set the entry to null and assign List L to the row at index i
-    //       iterate through the L until you reach column j, then break
-    //       if L was empty of the index fell off the back of L
-    //               append the new value x to L if x is not 0 (add to end of row)
-    //               increment the NNZ
-    //       else if still on L but past column j--------------------------------------------------------------------------------------------------------------
-    //               insert the new value x before the current index if x is not 0
-    //               increment the NNZ
-    //       else (still on L at column j)
-    //               if x is not 0, set the entry value to x
-    //               else delete L and decrement the NNZ
+    if(index(L) == -1){
+        if(x != 0){
+            E = newEntry(j, x);
+            append(L, E);
+            M->NNZ++;
+        }
+    }
 }
 
 
@@ -366,15 +293,7 @@ Matrix copy(Matrix A){
         }
     }
     return copy;
-    
-    // iterate "i" from 1 to size of matrix "A" (inclusive):
-    //      move to the front of the matrix A's rows at index "i"
-    //      iterate through the rows[i] as long as the index is GTE 0:
-    //          assign Entry E to the cursor's data
-    //          set col to the E's column
-    //          set val to the E's value
-    //          append a new entry of (col, val) to matrix Copy's row at index "i"
-    //          increment the nnz value of copy and move to the next index of rows in A
+
 }
 
 
@@ -401,8 +320,8 @@ Matrix transpose(Matrix A){
             col = E->col;
             val = E->val;
 
-            Entry F = newEntry(i, val);
-            append(T->row[col], F);
+            E = newEntry(i, val);
+            append(T->row[col], E);
 
             moveNext(A->row[i]);
 
@@ -410,17 +329,6 @@ Matrix transpose(Matrix A){
     }
     return T;
 
-    // similar to Copy() but use "i" as the column now
-
-    // set the Transpose matrix T's nnz to be the same as A
-    // iterate "i" from 1 to size of matrix "A" (inclusive):
-    //      move to the front of the matrix A's rows at index "i"
-    //      iterate through the rows[i] as long as the index is GTE 0:
-    //          assign Entry E to the cursor's data
-    //          set col to the E's column
-    //          set val to the E's value
-    //          append a new entry of (i, val) to matrix T's row at index "i"
-    //          increment the nnz value of copy and move to the next index of rows in A
 }
 
 
@@ -468,16 +376,6 @@ Matrix scalarMult(double x, Matrix A){
 
     return M;
 
-    // set the matrix M's nnz to be the same as A
-    // iterate "i" from 1 to size of matrix "A" (inclusive):
-    //      move to the front of the matrix A's rows at index "i"
-    //      iterate through the rows[i] as long as the index is GTE 0:
-    //          assign Entry E to the cursor's data
-    //          set col to the E's column
-    //          set val to the E's value * x
-    //          append a new entry of (i, val) to matrix Copy's row at index "i"
-    //          increment the nnz value of copy and move to the next index of rows in A
-
 }
 
 
@@ -485,22 +383,11 @@ Matrix scalarMult(double x, Matrix A){
 // helper function vector sum for functions sum() diff()
 // Assuming C is an empty List object, sets C to P+Q (if flag==1) or P-Q 
 // (if flag==-1), considered as sparse vectors. 
-// Pre: P!=Q, P and Q are rows in different Matrix objects.--------------------------------------------------------------------------------
+// Pre: P!=Q, P and Q are rows in different Matrix objects.
 void vecSum(List A, List B, List C, int sign, Matrix M) {
     double x, y, z;
     Entry a, b;
 
-    // Read this before moving on:
-    // int "x" can nonly be 1 or -1, indicating if the computation
-    // is going to be a subtraction or addition
-    // to add/sub two vals it will work like this: val1 + (x)val2
-    // if x is 1 it will add normally, if its negative one, it will subtract it
-    // **&&** === this symbol is for the line i am reffering to
-
-    // if(sign <= 1){
-    //     moveFront(A);
-    //     moveFront(B);
-    // }
     moveFront(A);
     moveFront(B);
 
@@ -549,33 +436,6 @@ void vecSum(List A, List B, List C, int sign, Matrix M) {
         M->NNZ++;
         moveNext(B);
     }
-
-
-    // move to the front of both lists
-    // iterate through the two lists as long as their indexes are GTE 0:
-        // assign Entry "a" and "b" to the cursor's data at list "A" and "B"
-        // set x to the value of entry "a"
-        // **&&** set y to (sign)*value of entry "b"
-        // if the column of entry "a" equals "b's":
-        //      set z to the sum of x and y
-        //      if z isn't 0 then append a new entry of (a's col, z) to list C
-        //      move to the next element of List A and B
-        // else if Entry "a's" column is LT "b's"
-        //      append a new entry of (a's col, x) to list C
-        //      catch up with list A by calling moveNext on it
-        // else
-        //      append a new entry of (b's col, y) to list C
-        //      catch up with list B by calling moveNext on it
-
-    // iterate through your list A as long as it's index is GTE 0:
-    //      assign Entry "a" to the cursor's data at list "A"
-    //      append a new entry of (a's co, a's val) to List C
-    //      move the cursor to the next element of list A
-
-    // iterate through your list B as long as it's index is GTE 0:
-    //      assign Entry "b" to the cursor's data at list "B"
-    //      append a new entry of (b's col, b's val) to List C
-    //      move the cursor to the next element of list B
 }
 
 
@@ -609,16 +469,8 @@ Matrix sum(Matrix A, Matrix B){
             vecSum(A->row[i], B->row[i], Add->row[i], 1, Add);
         }
     }
-
-    // for(int i = 1; i < Add->size; i++){-----------------------------------------------------CHANGED VECSUM TO INCLUDE MATRIX, COUNTS NNZ
-    //     Add->NNZ += length(Add->row[i]);
-    // }
-
     return Add;
 
-    // if A and B are equal just set Add by calling scalarMult on either of the matrices by 2
-    // else iterate "i" from 1 to size of the matrix:
-    //      set ADD's row at index "i" by calling vecSum on A's rows[i], B's rows[i]
 }
 
 
@@ -661,16 +513,7 @@ Matrix diff(Matrix A, Matrix B){
     //     vecSum(A->row[i], B->row[i], Diff->row[i], -1, Diff);
     // }
 
-
-    // for(int i = 1; i <= Diff->size; i++){-----------------------------------------------------CHANGED VECSUM TO INCLUDE MATRIX, COUNTS NNZ
-    //     Diff->NNZ += length(Diff->row[i]);
-    // }
-
     return Diff; 
-
-    // if A and B are equal just call make zero on Diff and return it
-    // else iterate "i" from 1 to size of the matrix:
-    //      set Diff's row at index "i" by calling vecSum on A's rows[i], B's rows[i]
 
 }
 
@@ -678,7 +521,7 @@ Matrix diff(Matrix A, Matrix B){
 
 // vectorDot()
 // Returns the dot product of Lists P and Q considered as sparse vectors.
-// Pre: P!=Q, P and Q are rows in different Matrix objects.--------------------------------------------------------------------------------
+// Pre: P!=Q, P and Q are rows in different Matrix objects.
 double vecDot(List A, List B) {
 
     if( A==NULL ){
@@ -712,17 +555,6 @@ double vecDot(List A, List B) {
         }
     }
     return dp;
-
-    // move to the front of both lists
-    // iterate through the two lists as long as their indexes are GTE 0:
-        // assign Entry "a" and "b" to the cursor's data at list "A" and "B"
-
-        // if the column of entry "a" equals "b's":
-        //      increment dp by the multiplicaion of entry "a" and "b's" values
-        //      move to the next element of List A and B
-        // else if Entry "a's" column is LT "b's"
-        //      catch up with list A by calling moveNext on it
-        // else catch up with list B by calling moveNext on it
 }
 
 
@@ -759,8 +591,8 @@ Matrix product(Matrix A, Matrix B){
     int i, j;
     double x;
 
-    for(i = 1; i < A->size+1; i++){
-        for(j = 1; j < A->size+1; j++){
+    for(i = 1; i <= A->size; i++){
+        for(j = 1; j <= A->size; j++){
             
             if(length(A->row[i]) == 0){
                 break;
@@ -776,17 +608,6 @@ Matrix product(Matrix A, Matrix B){
     }
     freeMatrix(&T);
     return M;
-
-
-    // iterate "i" from 1 to size of Matrix A:-------------------------------------------------ADD +1 TO SIZE, SAME FOR ONE BELOW
-    //      iterate "j" from 1 to size of Matrix A:
-
-    //          set "x" to the dot product of Matrix A's row[i] and T's row[j]
-    //          if "x" isn't zero:
-    //              append new entry (j, x) to Matrix M
-    //              increment the nnz 
-
-    // free the transpose matrix
     
 }
 
@@ -799,7 +620,7 @@ Matrix product(Matrix A, Matrix B){
 // list of pairs "(col, val)" giving the column numbers and non-zero values
 // in that row. The double val will be rounded to 1 decimal point.
 void printMatrix(FILE* out, Matrix M){
-    Entry E = newEntry(0, 0);
+    Entry E;
     int cont = 0;
     for (int i = 1; i <= size(M); i++) {
         cont = 0;
@@ -822,5 +643,6 @@ void printMatrix(FILE* out, Matrix M){
             fprintf(out, "\n");
         }
     }
+    //free(&E);
 }
 
