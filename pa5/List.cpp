@@ -27,6 +27,7 @@ List::List(){
 
     frontDummy = new Node((ListElement)NULL);
     backDummy = new Node((ListElement)NULL);
+
     frontDummy->next = backDummy;
     backDummy->prev = frontDummy;
     beforeCursor = frontDummy;
@@ -45,6 +46,7 @@ List::List(const List& L){
     backDummy->prev = frontDummy;
     beforeCursor = frontDummy;
     afterCursor = backDummy;
+
     pos_cursor = 0;
     num_elements = 0;
 
@@ -197,9 +199,12 @@ ListElement List::movePrev(){
 // insertAfter()
 // Inserts x after cursor.
 void List::insertAfter(ListElement x){
+    
     Node* temp = new Node(x);
+
     temp->prev = beforeCursor;
     temp->next = afterCursor;
+
     beforeCursor->next = temp;
     afterCursor->prev = temp;
     afterCursor = temp;
@@ -210,9 +215,12 @@ void List::insertAfter(ListElement x){
 // insertBefore()
 // Inserts x before cursor.
 void List::insertBefore(ListElement x){
+    
     Node* temp = new Node(x);
+
     temp->next = afterCursor;
     temp->prev = beforeCursor;
+
     beforeCursor->next = temp;
     afterCursor->prev = temp;
     beforeCursor = temp;
@@ -232,12 +240,6 @@ void List::setAfter(ListElement x){
 
     afterCursor->data = x;
 
-    // Node* N = new Node(x);
-	// N->next = afterCursor;
-	// N->prev = beforeCursor;
-	// beforeCursor->next = N;
-	// afterCursor->next->prev = N;
-	// afterCursor = N;
 }
 
 // setBefore()
@@ -251,12 +253,6 @@ void List::setBefore(ListElement x){
 
     beforeCursor->data = x;
 
-    // Node* N = new Node(x);
-	// N->prev = beforeCursor->prev;
-	// N->next = afterCursor;
-	// afterCursor->prev = N;
-	// beforeCursor->prev->next =N;
-	// beforeCursor = N;
 }
 
 // eraseAfter()
@@ -313,7 +309,6 @@ void List::eraseBefore(){
 // at position length(), and returns -1. 
 int List::findNext(ListElement x){
 
-
     while (afterCursor != backDummy) {
         if (afterCursor->data == x) {
             moveNext();
@@ -346,6 +341,9 @@ int List::findPrev(ListElement x){
 
 }
 
+
+
+
 // cleanup()
 // Removes any repeated elements in this List, leaving only unique elements.
 // The order of the remaining elements is obtained by retaining the frontmost 
@@ -353,6 +351,8 @@ int List::findPrev(ListElement x){
 // is not moved with respect to the retained elements, i.e. it lies between 
 // the same two retained elements that it did before cleanup() was called.
 void List::cleanup(){
+
+    //help recieved for this function, no code shared, explained on whiteboard
 
     int original = position();
 	int before = 0;
@@ -368,14 +368,12 @@ void List::cleanup(){
 		if(findNext(beforeCursor->data) == -1){
 			counter++;
 		}else{
-
             //if found delete prev
 			if(position() < original){
 				before++;
 			}
 			eraseBefore();
 		}
-
 
         //reset and continue going through
 		moveFront();
@@ -384,14 +382,13 @@ void List::cleanup(){
 		}
 	}
 
-	//move cursor to correct spot
+	//catch up cursor
 	int moves= original - before;
-
 	moveFront();
 	for(int i= 0; i < moves; i++){
 		moveNext();
 	}
-    
+
 }
  
 // concat()
@@ -423,6 +420,8 @@ List List::concat(const List& L) const{
 // separated sequence of elements, surrounded by parentheses.
 std::string List::to_string() const{
     
+    //modified from queue.cpp (from examples)
+
     Node* N = nullptr;
     std::string s = "(";
 
@@ -445,6 +444,8 @@ bool List::equals(const List& R) const{
         return false;
     }
 
+    //modified from queue.cpp (from examples)
+
     bool eq = false;
     Node* N = nullptr;
     Node* M = nullptr;
@@ -464,7 +465,11 @@ bool List::equals(const List& R) const{
 
 
 // Overriden Operators -----------------------------------------------------
-   
+
+
+//modified from queue.cpp (from examples)
+
+
 // operator<<()
 // Inserts string representation of L into stream.
 std::ostream& operator<<( std::ostream& stream, const List& L ){

@@ -1,0 +1,93 @@
+//-----------------------------------------------------------------------------
+//Preston Nguyen
+//prhunguy
+//pa5
+//-----------------------------------------------------------------------------
+
+#include<iostream>
+#include<fstream>
+#include<string>
+#include"List.h"
+
+#include <cstdlib>
+
+using namespace std;
+
+void shuffle(List& D);
+
+int main(int argc, char * argv[]){
+
+    // check command line for correct number of arguments
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <deck size>" << std::endl;
+        return(EXIT_FAILURE);
+    }
+    
+
+
+    std::cout << "deck size       shuffle count" << std::endl;
+    std::cout << "------------------------------" << std::endl;
+
+    //get user unput for size of deck
+    int maxDeckSize = stoi(argv[1]);
+    
+    List deck, original;
+    int count;
+
+    for (int i = 1; i <= maxDeckSize; i++) {
+
+        deck.moveBack();
+		deck.insertBefore(i);
+
+        original = deck;
+
+        shuffle(deck);
+        count = 1;
+
+        while (!deck.equals(original)){
+            shuffle(deck);
+            count++;
+        }
+
+        if(i <= 9){
+			std::cout << " "<< i << "               "<< count <<std::endl;
+		}else if(i <= 99){
+			std::cout << " "<< i << "              "<< count <<std::endl;
+		}else{
+            std::cout << " "<< i << "             "<< count <<std::endl;
+        }
+    }
+    
+    return(EXIT_SUCCESS);
+}
+
+void shuffle(List& D){
+    int length = D.length();
+    int half = length / 2;
+
+    List A, B;
+    B = D;
+
+    B.moveFront();
+
+    for (int i = 0; i < half; i++) {
+        A.insertBefore(B.front());
+        B.eraseAfter();
+    }
+
+    D.clear();
+    A.moveFront();
+    B.moveFront();
+
+    for (int i = 0; i < half; i++) {
+        D.insertBefore(B.moveNext());
+        D.insertBefore(A.moveNext());
+    }
+
+    // if odd length
+    if (length % 2 == 1) {
+        D.insertBefore(B.moveNext());
+    }
+    
+}
+
