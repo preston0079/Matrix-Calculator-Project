@@ -112,6 +112,11 @@ int main(){
 
     cout << "A and C equals (1 for true, 0 for false)? " << A.equals(C) << endl;
 
+    cout << endl;
+
+    C.clear();
+    cout << "Check clear C position = " << C.position() << endl;
+    cout << "Check clear C length = " << C.length() << endl;
 
     return 0;
 
