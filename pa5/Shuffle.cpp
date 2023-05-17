@@ -43,19 +43,23 @@ int main(int argc, char * argv[]){
 
     for (int i = 1; i <= decksize; i++) {
 
+        //insert into deck
         deck.moveBack();
 		deck.insertBefore(i);
 
         original = deck;
 
+        //start shuffle
         shuffle(deck);
         count = 1;
 
+        //repeat shuffle until equal
         while (!deck.equals(original)){
             shuffle(deck);
             count++;
         }
 
+        //print contents of table
         if(i <= 9){
 			std::cout << " "<< i << "               "<< count <<std::endl;
 		}else if(i <= 99){
@@ -77,15 +81,18 @@ void shuffle(List& D){
 
     B.moveFront();
 
+    //split deck
     for (int i = 0; i < half; i++) {
         A.insertBefore(B.front());
         B.eraseAfter();
     }
 
     D.clear();
+
     A.moveFront();
     B.moveFront();
 
+    //alternate with insert back into D
     for (int i = 0; i < half; i++) {
         D.insertBefore(B.moveNext());
         D.insertBefore(A.moveNext());
