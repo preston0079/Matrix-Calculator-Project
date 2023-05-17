@@ -19,16 +19,14 @@ List::Node::Node(ListElement x){
 }
 
 
-
-
 // Class Constructors & Destructors -------------------------------------------
 
 // Creates new List in the empty state.
 List::List(){
 
 
-    frontDummy = new Node(ListElement());
-    backDummy = new Node(ListElement());
+    frontDummy = new Node((ListElement)NULL);
+    backDummy = new Node((ListElement)NULL);
     frontDummy->next = backDummy;
     backDummy->prev = frontDummy;
     beforeCursor = frontDummy;
@@ -40,8 +38,8 @@ List::List(){
 
 // Copy constructor.
 List::List(const List& L){
-    frontDummy = new Node(ListElement());
-    backDummy = new Node(ListElement());
+    frontDummy = new Node((ListElement)NULL);
+    backDummy = new Node((ListElement)NULL);
 
     frontDummy->next = backDummy;
     backDummy->prev = frontDummy;
@@ -134,25 +132,15 @@ ListElement List::peekPrev() const{
 // clear()
 // Deletes all elements in this List, setting it to the empty state.
 void List::clear(){
-    
-    Node* current = frontDummy;
 
-    while (current != backDummy) {
-        Node* temp = current;
-        current = current->next;
-        delete temp;
-    }
-    delete current;
+    moveFront();
+	while(length() !=  0){
+		eraseAfter();
+	}
 
     beforeCursor = frontDummy;
     afterCursor = backDummy;
-    
-
-    frontDummy = nullptr;
-    backDummy = nullptr;
-
-    pos_cursor = 0;
-    num_elements = 0;
+	pos_cursor = 0;
 }
 
 // moveFront()
@@ -243,6 +231,13 @@ void List::setAfter(ListElement x){
     }
 
     afterCursor->data = x;
+
+    // Node* N = new Node(x);
+	// N->next = afterCursor;
+	// N->prev = beforeCursor;
+	// beforeCursor->next = N;
+	// afterCursor->next->prev = N;
+	// afterCursor = N;
 }
 
 // setBefore()
@@ -255,6 +250,13 @@ void List::setBefore(ListElement x){
     }
 
     beforeCursor->data = x;
+
+    // Node* N = new Node(x);
+	// N->prev = beforeCursor->prev;
+	// N->next = afterCursor;
+	// afterCursor->prev = N;
+	// beforeCursor->prev->next =N;
+	// beforeCursor = N;
 }
 
 // eraseAfter()
@@ -274,6 +276,8 @@ void List::eraseAfter(){
 
     delete temp;
     num_elements--;
+
+
 
 }
 
@@ -319,9 +323,6 @@ int List::findNext(ListElement x){
     }
     pos_cursor = length();
     return -1;
-
-
-
 }
 
 // findPrev()
@@ -414,6 +415,7 @@ List List::concat(const List& L) const{
     result.moveFront();
     return result;
 
+
 }
 
 // to_string()
@@ -430,6 +432,8 @@ std::string List::to_string() const{
 
     s += std::to_string(N->data)+= ")";
     return s;
+
+
 }
 
 // equals()
@@ -454,6 +458,7 @@ bool List::equals(const List& R) const{
         M = M->next;
     }
     return eq;
+
 }
 
 
@@ -477,13 +482,17 @@ bool operator==( const List& A, const List& B ){
 // Overwrites the state of this List with state of L.
 List& List::operator=( const List& L ){
     if( this != &L ){ // not self assignment
-    // make a copy of Q
+    // make a copy of L
     List temp = L;
 
     // then swap the copy's fields with fields of this
     std::swap(frontDummy, temp.frontDummy);
     std::swap(backDummy, temp.backDummy);
     std::swap(num_elements, temp.num_elements);
+
+    std::swap(beforeCursor, temp.beforeCursor);
+    std::swap(afterCursor, temp.afterCursor);
+    std::swap(pos_cursor, temp.pos_cursor);
     }
 
     // return this with the new data installed
