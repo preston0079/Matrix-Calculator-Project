@@ -25,10 +25,10 @@ int main(int argc, char * argv[]){
     
 
     //get user unput for size of deck
-    int maxDeckSize = stoi(argv[1]);
+    int decksize = stoi(argv[1]);
 
     //if deck size is negative
-    if (maxDeckSize <= 0) {
+    if (decksize <= 0) {
         std::cerr << "Usage: " << argv[0] << " invalid deck size" << std::endl;
         return(EXIT_FAILURE);
     }
@@ -41,7 +41,7 @@ int main(int argc, char * argv[]){
     List deck, original;
     int count;
 
-    for (int i = 1; i <= maxDeckSize; i++) {
+    for (int i = 1; i <= decksize; i++) {
 
         deck.moveBack();
 		deck.insertBefore(i);
