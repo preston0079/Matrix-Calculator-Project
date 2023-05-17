@@ -1,4 +1,4 @@
-## Programming Assignment 4 - Preston Nguyen
+## Programming Assignment 5 - Preston Nguyen
 prhunguy
 
 List.h
@@ -19,7 +19,7 @@ The main file for this assignment. It will handle the input from the user and ou
 
 Makefile
 
-Compiles the files that are part of this assignment and make them executable.
+Compiles the files that are part of this assignment and makes them executable.
 
 README.md
 
