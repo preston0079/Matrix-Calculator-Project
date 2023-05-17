@@ -24,13 +24,20 @@ int main(int argc, char * argv[]){
     }
     
 
+    //get user unput for size of deck
+    int maxDeckSize = stoi(argv[1]);
+
+    //if deck size is negative
+    if (maxDeckSize <= 0) {
+        std::cerr << "Usage: " << argv[0] << " invalid deck size" << std::endl;
+        return(EXIT_FAILURE);
+    }
+
 
     std::cout << "deck size       shuffle count" << std::endl;
     std::cout << "------------------------------" << std::endl;
 
-    //get user unput for size of deck
-    int maxDeckSize = stoi(argv[1]);
-    
+
     List deck, original;
     int count;
 
