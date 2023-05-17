@@ -74,13 +74,13 @@ int List::length() const{
     return num_elements;
 }
 
-// front()S
+// front()
 // Returns the front element in this List.
 // pre: length()>0
 ListElement List::front() const{
     
-    if(length() < 0){
-        throw std::range_error("List: front(): empty list");
+    if(length() <= 0){
+        throw std::length_error("List: front(): empty list");
     }
     
     return frontDummy->next->data;
@@ -92,7 +92,7 @@ ListElement List::front() const{
 ListElement List::back() const{
     
     if(length() <= 0){
-        throw std::range_error("List: back(): empty list");
+        throw std::length_error("List: back(): empty list");
     }
     
     return backDummy->prev->data;
@@ -177,7 +177,7 @@ void List::moveBack(){
 // pre: position()<length() 
 ListElement List::moveNext(){
 
-    if(position() >= length()){
+    if(position() > length()){
         throw std::range_error("List: moveNext(): cursor at back");
     }
 
@@ -350,7 +350,7 @@ int List::findPrev(ListElement x){
 // The order of the remaining elements is obtained by retaining the frontmost 
 // occurrance of each element, and removing all other occurances. The cursor 
 // is not moved with respect to the retained elements, i.e. it lies between 
-// the same two retained elements that it did before cleanup() was called.----------------------------------------------------------------------------------
+// the same two retained elements that it did before cleanup() was called.
 void List::cleanup(){
 
     int original = position();
@@ -383,7 +383,6 @@ void List::cleanup(){
 		}
 	}
 
-
 	//move cursor to correct spot
 	int moves= original - before;
 
@@ -391,6 +390,7 @@ void List::cleanup(){
 	for(int i= 0; i < moves; i++){
 		moveNext();
 	}
+    
 }
  
 // concat()
