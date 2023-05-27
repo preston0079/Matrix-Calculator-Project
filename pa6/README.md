@@ -39,4 +39,4 @@ That is this file. It is meant to act as a table of contents for the files in th
 
 Additional Notes:
 
-Help recieved from TA pseudocode.
+Help recieved from TA pseudocode (additional help from other TA: Norton Choy).
