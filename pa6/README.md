@@ -15,7 +15,7 @@ This is the BigInteger ADT.
 
 BigIntegerTest.cpp
 
-This is the tester file for igInteger.cpp.
+This is the tester file for BigInteger.cpp.
 
 List.h
 
