@@ -218,8 +218,13 @@ BigInteger::BigInteger(std::string s) {
 
     // if the first character is + or -
     if (s[0] == '-' || s[0] == '+') {
-        // get sign and remove it from the string
-        signum = (s[0] == '-') ? -1 : 1;
+        
+        if (s[0] == '-') {
+            signum = -1;
+        } else {
+            signum = 1;
+        }
+        
         s = s.substr(1);
     } else {
         signum = 1;
