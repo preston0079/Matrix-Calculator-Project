@@ -90,6 +90,7 @@ Dictionary::Node* Dictionary::search(Node* R, keyType k) const{
         }
     }
     return nil;
+
 }
 
 // findMin()
@@ -137,12 +138,13 @@ Dictionary::Node* Dictionary::findNext(Node* N){
     }else{
         Node* y = N->parent;
 
-        while(y != nil && N != y->right){
+        while(y != nil && N == y->right){
             N = y;
             y = N->parent;
         }
         return y;
     }
+
 }
 
 // findPrev()
@@ -158,12 +160,14 @@ Dictionary::Node* Dictionary::findPrev(Node* N){
     }else{
         Node* y = N->parent;
 
-        while(y != nil && N != y->left){
+        while(y != nil && N == y->left){
             N = y;
             y = N->parent;
         }
         return y;
     }
+
+
 }
 
 
@@ -242,6 +246,7 @@ bool Dictionary::hasCurrent() const{
     }else{
         return false;
     }
+
 
 }
 
@@ -327,6 +332,7 @@ void Dictionary::setValue(keyType k, valType v){
 
     // increment num_pairs
     num_pairs++;
+
 }
 
 // added a helper function to help with remove()
@@ -377,12 +383,11 @@ void Dictionary::remove(keyType k){
             y->right = N->right;
             y->right->parent = y;
             
-        }else{
-            transplant(N, y);
-            y->left = N->left;
-            y->left->parent = y;
+        }
             
-        }  
+        transplant(N, y);
+        y->left = N->left;
+        y->left->parent = y;  
 
         num_pairs--;
     }
