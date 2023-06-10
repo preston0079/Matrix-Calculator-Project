@@ -9,6 +9,9 @@
 #include<string>
 #include <cctype>
 
+#include <algorithm>
+
+
 #include"Dictionary.h"
 
 
@@ -21,7 +24,6 @@ int main(int argc, char * argv[]){
     ifstream in;
     ofstream out;
 
-    string line;
 
     if (argc != 3) {
         cerr << "Usage: " << argv[0] << " <input file> <output file>" << endl;
@@ -42,44 +44,43 @@ int main(int argc, char * argv[]){
 
     string delim = " \t\\\"\',<.>/?;:[{]}|`~!@#$%^&*()-_=+0123456789";
 
-    int lineCount = 0;
+    size_t begin, end, len;
+
+    string line;
+    string token;
+
+
+    int linecount = 0;
     
     while(getline(in, line)){
-        lineCount++;
-        size_t begin = 0;
-        size_t end = 0;
-        size_t len = line.length();
+        linecount++;
+        len = line.length();
 
-        while(end < len){
+        // get first token
+        begin = min(line.find_first_not_of(delim, 0), len);
+        end = min(line.find_first_of(delim, begin), len);
+        token = line.substr(begin, (end - begin));
 
-            begin = line.find_first_not_of(delim, end);
-            // If no more words on the line
-            if(begin == string::npos){
-                break;
-            }
+        // we have a token
+        while (token != "") {
 
-
-            end = line.find_first_of(delim, begin);
-            // Last word on the line
-            if(end == string::npos){
-                end = len; 
-            }
-
-
-            string token = line.substr(begin, end - begin);
-
-            // Lowercase words
+            // make lower case
             for(size_t i = 0; i < token.length(); i++){
                 token[i] = tolower(token[i]);
             }
 
-            // Update the word frequency in the dictionary
-            if(D.contains(token)){
-                int& freq = D.getValue(token);
-                freq++;
-            }else{
+
+            if (D.contains(token)) {
+                D.getValue(token)++;
+            }
+            else {
                 D.setValue(token, 1);
             }
+
+            // get next token
+            begin = min(line.find_first_not_of(delim, (end + 1)), len);
+            end = min(line.find_first_of(delim, begin), len);
+            token = line.substr(begin, (end - begin));
         }
     }
 
@@ -96,7 +97,3 @@ int main(int argc, char * argv[]){
 }
 
 
-
-
-
-    
